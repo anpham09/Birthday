@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Ba!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364); /* galaxy blue */
+      overflow-x: hidden;
+    }
+
+
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      font-size: 2.5em;
+      font-weight: bold;
+      color: rgb(115, 156, 173); /* pastel light blue */
+      position: relative;
+
+    }
+
+    .typewriter {
+      font-family: 'Courier New', monospace;
+      font-size: 50px;
+      text-align: center;
+      color: #4886a0; /* soft cyan blue */
+      margin: 10px auto 30px;
+      min-width: 700px;
+      max-width: 700px;
+      min-height: 50px;
+      white-space: pre-wrap;
+    }
+
+    .nghe_image{
+      display: none;
+    }
+
+    .slideshow-container {
+      position: relative;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .active {
+      display: block;
+    }
+
+    .wish-button, .music-button {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 25px;
+      background-color: #203a57; /* dark galaxy blue */
+      color: #5997ae; /* soft bluish-white */
+      border: none;
+      border-radius: 30px;
+      font-weight: bolder;
+      font-size: 35px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .wish-button:hover, .music-button:hover {
+      background-color: #34577c;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.2);
+      z-index: 999;
+      text-align: center;
+      font-size: 1.2em;
+    }
+
+    .popup.show {
+      display: block;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: red;
+      animation: fall 5s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    /* Heart animation */
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: floatUp 4s linear infinite;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        bottom: 0;
+        opacity: 1;
+        transform: translateX(0) rotate(45deg);
+      }
+      100% {
+        bottom: 100vh;
+        opacity: 0;
+        transform: translateX(-30px) rotate(45deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    
+    <div style="display: flex;">
+      <div>
+        🎂 HAPPY BIRTHDAY TO BA! 🎂
+        <div class="typewriter" id="message"></div>
+      </div>
+      
+      <div class="nghe_image"><img  src="./nghe_image.jpg"></div>
+    </div>
+    
+  </header>
+
+  <!-- <div class="slideshow-container">
+    <div class="slide active"><img src="https://placekitten.com/700/400" alt="Family 1" /></div>
+    <div class="slide"><img src="https://placekitten.com/701/400" alt="Family 2" /></div>
+    <div class="slide"><img src="https://placekitten.com/702/400" alt="Family 3" /></div>
+  </div> -->
+
+  <!-- <button class="wish-button" onclick="showWish()">🎁 Make a Wish</button> -->
+  <!-- <button class="music-button" onclick="toggleMusic()">🎵 Hihi có bất ngờ!</button> -->
+<!-- 
+  <div class="popup" id="wishPopup">
+    🧁 Chúc ba sinh nhật vui vẻ! Con yêu ba nhiều lắm! 💖
+  </div> -->
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop src="./hpbd_to_ba.mp3">
+    <!-- <source src="https://www.bensound.com/bensound-music/bensound-buddy.mp3" type="audio/mp3" /> -->
+    <!-- Your browser does not support the audio element. -->
+  </audio>
+
+  <script>
+    // Typewriter
+    const msg = "Ba ơi, con xin cảm ơn ba vì tất cả những gì ba đã làm cho chúng con. Con kính chúc ba luôn luôn hạnh phúc khoẻ mạnh nha ba. \nCon yêu ba nhiều lắm!\n\n   "+"Con gái iu của ba->";
+    let i = 0;
+    const nghe_image = document.querySelector(".nghe_image");
+
+
+    function typeWriter() {
+      if (i < msg.length) {
+        document.getElementById("message").innerHTML += msg.charAt(i);
+        i++;
+        setTimeout(typeWriter, 70);
+      } else {
+        nghe_image.style.display = "block"; // Show image when done
+      }
+    }
+    typeWriter();
+    // nghe_image.style.display = "block";
+
+    // Slideshow
+    // let slideIndex = 0;
+    // const slides = document.querySelectorAll(".slide");
+    // function showSlides() {
+    //   slides.forEach((slide) => slide.classList.remove("active"));
+    //   slideIndex = (slideIndex + 1) % slides.length;
+    //   slides[slideIndex].classList.add("active");
+    // }
+    // setInterval(showSlides, 3000);
+
+    // Wish popup
+    // function showWish() {
+    //   const popup = document.getElementById("wishPopup");
+    //   popup.classList.add("show");
+    //   setTimeout(() => popup.classList.remove("show"), 4000);
+    // }
+
+    // Confetti
+    // for (let i = 0; i < 50; i++) {
+    //   let confetti = document.createElement("div");
+    //   confetti.className = "confetti";
+    //   confetti.style.left = Math.random() * 100 + "vw";
+    //   confetti.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+    //   confetti.style.animationDuration = 3 + Math.random() * 3 + "s";
+    //   document.body.appendChild(confetti);
+    // }
+
+    // Heart animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }
+    setInterval(createHeart, 500);
+
+    // Music toggle
+    const bgMusic = document.getElementById("bgMusic");
+    let isPlaying = false;
+
+
+    // function toggleMusic() {
+    //   if (isPlaying) {
+    //     bgMusic.pause();
+    //   } else {
+    //     bgMusic.play();
+    //   }
+    //   isPlaying = !isPlaying;
+    // }
+
+    // Auto start music after user interaction (required by browser)
+    // window.addEventListener('click', () => {
+    //   if (!isPlaying) {
+    //     bgMusic.play().catch(() => {});
+    //     isPlaying = true;
+    //   }
+    // }, { once: true });
+    window.addEventListener('DOMContentLoaded', () => {
+      bgMusic.play().catch((e) => {
+        console.warn("Autoplay failed, waiting for user interaction.", e);
+      });
+    });
+
+  </script>
+</body>
+</html>

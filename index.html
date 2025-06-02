@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Click vào món quà 🎁</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364); /* galaxy blue */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gift-box {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      z-index: 1;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.1);
+    }
+
+    .flash-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vmax;
+      height: 100vmax;
+      background: white;
+      opacity: 0;
+      border-radius: 50%;
+      z-index: 999;
+      pointer-events: none;
+      animation: flashOut 1s forwards;
+    }
+
+    @keyframes flashOut {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+      }
+    }
+
+    .fade-out {
+      animation: fadeOut 0.2s forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div onclick="goToBirthdayPage()">
+    <img src="./pixil-frame-0__5_-removebg-preview.png" alt="Click vào món quà" class="gift-box" width="700" />
+  </div>
+
+  <script>
+    function goToBirthdayPage() {
+      // Tạo hiệu ứng tỏa sáng
+      const flash = document.createElement('div');
+      flash.className = 'flash-effect';
+      document.body.appendChild(flash);
+
+      // Fade out toàn bộ trang sau 1s
+      document.body.classList.add('fade-out');
+
+      // Chuyển trang sau khi hiệu ứng kết thúc
+      setTimeout(() => {
+        window.location.href = "birthday.html"; // Cập nhật đường dẫn ở đây nếu cần
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
