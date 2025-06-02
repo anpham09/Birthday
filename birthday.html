@@ -8,68 +8,52 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364); /* galaxy blue */
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       overflow-x: hidden;
+      font-size: 15px;
     }
-
 
     header {
       text-align: center;
-      padding: 40px 20px 20px;
-      font-size: 2.5em;
+      padding: 30px 10px 15px;
+      font-size: 2em;
       font-weight: bold;
-      color: rgb(115, 156, 173); /* pastel light blue */
-      position: relative;
-
+      color: rgb(115, 156, 173);
     }
 
     .typewriter {
       font-family: 'Courier New', monospace;
-      font-size: 50px;
+      font-size: 30px;
       text-align: center;
-      color: #4886a0; /* soft cyan blue */
+      color: #4886a0;
       margin: 10px auto 30px;
-      min-width: 700px;
-      max-width: 700px;
-      min-height: 50px;
+      max-width: 90vw;
+      min-height: 60px;
       white-space: pre-wrap;
+      word-wrap: break-word;
     }
 
-    .nghe_image{
+    .nghe_image {
       display: none;
+      text-align: center;
     }
 
-    .slideshow-container {
-      position: relative;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    .slide {
-      display: none;
-      width: 100%;
-    }
-
-    .slide img {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    .active {
-      display: block;
+    .nghe_image img {
+      max-width: 90%;
+      border-radius: 10px;
+      margin-top: 15px;
     }
 
     .wish-button, .music-button {
       display: block;
       margin: 20px auto;
-      padding: 12px 25px;
-      background-color: #203a57; /* dark galaxy blue */
-      color: #5997ae; /* soft bluish-white */
+      padding: 10px 20px;
+      background-color: #203a57;
+      color: #5997ae;
       border: none;
       border-radius: 30px;
-      font-weight: bolder;
-      font-size: 35px;
+      font-weight: bold;
+      font-size: 1.2em;
       cursor: pointer;
       transition: background 0.3s ease;
     }
@@ -85,38 +69,22 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      padding: 30px;
-      border-radius: 20px;
+      padding: 20px;
+      border-radius: 15px;
       box-shadow: 0 0 30px rgba(0,0,0,0.2);
       z-index: 999;
       text-align: center;
-      font-size: 1.2em;
+      font-size: 1em;
     }
 
     .popup.show {
       display: block;
     }
 
-    /* Confetti */
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: red;
-      animation: fall 5s linear infinite;
-      opacity: 0.7;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-100px) rotate(0deg); }
-      100% { transform: translateY(100vh) rotate(360deg); }
-    }
-
-    /* Heart animation */
     .heart {
       position: fixed;
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      height: 15px;
       background: pink;
       transform: rotate(45deg);
       animation: floatUp 4s linear infinite;
@@ -125,19 +93,19 @@
     .heart::before, .heart::after {
       content: "";
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      height: 15px;
       background: pink;
       border-radius: 50%;
     }
 
     .heart::before {
-      top: -10px;
+      top: -7.5px;
       left: 0;
     }
 
     .heart::after {
-      left: -10px;
+      left: -7.5px;
       top: 0;
     }
 
@@ -157,43 +125,17 @@
 </head>
 <body>
   <header>
-    
-    <div style="display: flex;">
-      <div>
-        🎂 HAPPY BIRTHDAY TO BA! 🎂
-        <div class="typewriter" id="message"></div>
-      </div>
-      
-      <div class="nghe_image"><img  src="./nghe_image.jpg"></div>
-    </div>
-    
+    🎂 HAPPY BIRTHDAY BA! 🎂
+    <div class="typewriter" id="message"></div>
+    <div class="nghe_image"><img src="./nghe_image.jpg" alt="Nghe Image"></div>
   </header>
 
-  <!-- <div class="slideshow-container">
-    <div class="slide active"><img src="https://placekitten.com/700/400" alt="Family 1" /></div>
-    <div class="slide"><img src="https://placekitten.com/701/400" alt="Family 2" /></div>
-    <div class="slide"><img src="https://placekitten.com/702/400" alt="Family 3" /></div>
-  </div> -->
-
-  <!-- <button class="wish-button" onclick="showWish()">🎁 Make a Wish</button> -->
-  <!-- <button class="music-button" onclick="toggleMusic()">🎵 Hihi có bất ngờ!</button> -->
-<!-- 
-  <div class="popup" id="wishPopup">
-    🧁 Chúc ba sinh nhật vui vẻ! Con yêu ba nhiều lắm! 💖
-  </div> -->
-
-  <!-- Background music -->
-  <audio id="bgMusic" loop src="./hpbd_to_ba.mp3">
-    <!-- <source src="https://www.bensound.com/bensound-music/bensound-buddy.mp3" type="audio/mp3" /> -->
-    <!-- Your browser does not support the audio element. -->
-  </audio>
+  <audio id="bgMusic" loop src="./hpbd_to_ba.mp3"></audio>
 
   <script>
-    // Typewriter
-    const msg = "Ba ơi, con xin cảm ơn ba vì tất cả những gì ba đã làm cho chúng con. Con kính chúc ba luôn luôn hạnh phúc khoẻ mạnh nha ba. \nCon yêu ba nhiều lắm!\n\n   "+"Con gái iu của ba->";
+    const msg = "Ba ơi, con xin cảm ơn ba vì tất cả những gì ba đã làm cho chúng con. Con kính chúc ba luôn luôn hạnh phúc khoẻ mạnh nha ba. \nCon yêu ba nhiều lắm!\n\n"+"-Con gái iu của ba-";
     let i = 0;
     const nghe_image = document.querySelector(".nghe_image");
-
 
     function typeWriter() {
       if (i < msg.length) {
@@ -201,40 +143,11 @@
         i++;
         setTimeout(typeWriter, 70);
       } else {
-        nghe_image.style.display = "block"; // Show image when done
+        nghe_image.style.display = "block";
       }
     }
     typeWriter();
-    // nghe_image.style.display = "block";
 
-    // Slideshow
-    // let slideIndex = 0;
-    // const slides = document.querySelectorAll(".slide");
-    // function showSlides() {
-    //   slides.forEach((slide) => slide.classList.remove("active"));
-    //   slideIndex = (slideIndex + 1) % slides.length;
-    //   slides[slideIndex].classList.add("active");
-    // }
-    // setInterval(showSlides, 3000);
-
-    // Wish popup
-    // function showWish() {
-    //   const popup = document.getElementById("wishPopup");
-    //   popup.classList.add("show");
-    //   setTimeout(() => popup.classList.remove("show"), 4000);
-    // }
-
-    // Confetti
-    // for (let i = 0; i < 50; i++) {
-    //   let confetti = document.createElement("div");
-    //   confetti.className = "confetti";
-    //   confetti.style.left = Math.random() * 100 + "vw";
-    //   confetti.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
-    //   confetti.style.animationDuration = 3 + Math.random() * 3 + "s";
-    //   document.body.appendChild(confetti);
-    // }
-
-    // Heart animation
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
@@ -244,33 +157,12 @@
     }
     setInterval(createHeart, 500);
 
-    // Music toggle
     const bgMusic = document.getElementById("bgMusic");
-    let isPlaying = false;
-
-
-    // function toggleMusic() {
-    //   if (isPlaying) {
-    //     bgMusic.pause();
-    //   } else {
-    //     bgMusic.play();
-    //   }
-    //   isPlaying = !isPlaying;
-    // }
-
-    // Auto start music after user interaction (required by browser)
-    // window.addEventListener('click', () => {
-    //   if (!isPlaying) {
-    //     bgMusic.play().catch(() => {});
-    //     isPlaying = true;
-    //   }
-    // }, { once: true });
     window.addEventListener('DOMContentLoaded', () => {
       bgMusic.play().catch((e) => {
         console.warn("Autoplay failed, waiting for user interaction.", e);
       });
     });
-
   </script>
 </body>
 </html>
