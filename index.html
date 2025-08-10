@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Click vào món quà 🎁</title>
+  <title>Birthday Gift 🎁</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
   <style>
     body {
@@ -16,6 +16,34 @@
       height: 100vh;
       overflow: hidden;
       position: relative;
+      color: #fff;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #203a57;
+      color: #5997ae;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #34577c;
     }
 
     .gift-box {
@@ -66,11 +94,49 @@
   </style>
 </head>
 <body>
-  <div onclick="goToBirthdayPage()">
-    <img src="./pixil-frame-0__5_-removebg-preview.png" alt="Click vào món quà" class="gift-box" width="400" />
+  <form id="setupForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <select id="relationship" required>
+      <option value="" disabled selected>Relationship</option>
+      <option value="friend">Friend</option>
+      <option value="mother">Mother</option>
+      <option value="father">Father</option>
+      <option value="sister">Sister</option>
+      <option value="brother">Brother</option>
+    </select>
+    <input type="file" id="image" accept="image/*" required />
+    <button type="submit">Create Gift</button>
+  </form>
+
+  <div id="gift" style="display:none" onclick="goToBirthdayPage()">
+    <img src="./pixil-frame-0__5_-removebg-preview.png" alt="Click the gift" class="gift-box" width="400" />
   </div>
 
   <script>
+    document.getElementById('setupForm')?.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const relationship = document.getElementById('relationship').value;
+      const file = document.getElementById('image').files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt){
+        localStorage.setItem('name', name);
+        localStorage.setItem('relationship', relationship);
+        localStorage.setItem('image', evt.target.result);
+        document.getElementById('setupForm').style.display = 'none';
+        document.getElementById('gift').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if(localStorage.getItem('name') && localStorage.getItem('image') && localStorage.getItem('relationship')){
+        document.getElementById('setupForm').style.display = 'none';
+        document.getElementById('gift').style.display = 'block';
+      }
+    });
+
     function goToBirthdayPage() {
       // Tạo hiệu ứng tỏa sáng
       const flash = document.createElement('div');
