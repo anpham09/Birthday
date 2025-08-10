@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
 
-  <title>Happy Birthday Ba!</title>
+  <title>Happy Birthday!</title>
   <style>
     body {
       margin: 0;
@@ -36,12 +36,12 @@
       word-wrap: break-word;
     }
 
-    .nghe_image {
+    .person-image {
       display: none;
       text-align: center;
     }
 
-    .nghe_image img {
+    .person-image img {
       max-width: 90%;
       border-radius: 10px;
       margin-top: 15px;
@@ -128,17 +128,35 @@
 </head>
 <body>
   <header>
-    🎂 HAPPY BIRTHDAY BA! 🎂
+    🎂 HAPPY BIRTHDAY <span id="nameDisplay"></span>! 🎂
     <div class="typewriter" id="message"></div>
-    <div class="nghe_image"><img src="./nghe_image.jpg" alt="Nghe Image"></div>
+    <div class="person-image"><img id="userImage" alt="Person Image"></div>
   </header>
 
   <audio id="bgMusic" loop src="./hpbd_to_ba.mp3"></audio>
 
   <script>
-    const msg = "Ba ơi, con xin cảm ơn ba vì tất cả những gì ba đã làm cho chúng con. Con kính chúc ba luôn luôn hạnh phúc khoẻ mạnh nha ba. \nCon yêu ba nhiều lắm!\n\n"+"-Con gái iu của ba-";
+    const name = localStorage.getItem('name');
+    const relationship = (localStorage.getItem('relationship') || '').toLowerCase();
+    const imageSrc = localStorage.getItem('image');
+
+    if(!name || !relationship || !imageSrc){
+      window.location.href = 'index.html';
+    }
+
+    document.getElementById('nameDisplay').textContent = name.toUpperCase();
+    document.getElementById('userImage').src = imageSrc;
+
+    const relationshipMessages = {
+      friend: `Happy Birthday, dear friend ${name}! Wishing you a day filled with joy and laughter.`,
+      mother: `Happy Birthday Mom! Thank you for your endless love and support.`,
+      father: `Happy Birthday Dad! Thank you for always being there.`,
+      sister: `Happy Birthday to my amazing sister ${name}!`,
+      brother: `Happy Birthday to my awesome brother ${name}!`
+    };
+    const msg = relationshipMessages[relationship] || `Happy Birthday ${name}! Wishing you a fantastic day!`;
     let i = 0;
-    const nghe_image = document.querySelector(".nghe_image");
+    const personImage = document.querySelector('.person-image');
 
     function typeWriter() {
       if (i < msg.length) {
@@ -146,7 +164,7 @@
         i++;
         setTimeout(typeWriter, 70);
       } else {
-        nghe_image.style.display = "block";
+        personImage.style.display = "block";
       }
     }
     typeWriter();
