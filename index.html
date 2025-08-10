@@ -104,6 +104,18 @@
       <option value="sister">Sister</option>
       <option value="brother">Brother</option>
     </select>
+    <select id="wishSelect">
+      <option value="">Choose a generated wish</option>
+      <option value="Happy Birthday! Wishing you a day filled with happiness and a year filled with joy.">Happy Birthday! Wishing you a day filled with happiness and a year filled with joy.</option>
+      <option value="May your birthday be as wonderful as you are.">May your birthday be as wonderful as you are.</option>
+      <option value="Another adventure-filled year awaits you. Happy Birthday!">Another adventure-filled year awaits you. Happy Birthday!</option>
+    </select>
+    <textarea id="customWish" placeholder="Or write your own wish"></textarea>
+    <div id="recordControls">
+      <button type="button" id="recordBtn">Record Voice Message (optional)</button>
+      <button type="button" id="stopBtn" disabled>Stop Recording</button>
+      <audio id="voicePreview" controls style="display:none"></audio>
+    </div>
     <input type="file" id="image" accept="image/*" required />
     <button type="submit">Create Gift</button>
   </form>
@@ -112,18 +124,85 @@
     <img src="./pixil-frame-0__5_-removebg-preview.png" alt="Click the gift" class="gift-box" width="400" />
   </div>
 
+  <div id="shareContainer" style="display:none; margin-top:20px; text-align:center;">
+    <input type="text" id="shareLink" readonly style="width:80%; padding:10px;" />
+    <button type="button" id="copyLinkBtn">Copy Link</button>
+  </div>
+
   <script>
+    const recordBtn = document.getElementById('recordBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const voicePreview = document.getElementById('voicePreview');
+    let mediaRecorder;
+    let audioChunks = [];
+
+    recordBtn.addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            localStorage.setItem('voice', reader.result);
+            voicePreview.src = reader.result;
+            voicePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(blob);
+        };
+        mediaRecorder.start();
+        recordBtn.disabled = true;
+        stopBtn.disabled = false;
+      } catch (err) {
+        console.error('Recording failed', err);
+      }
+    });
+
+    stopBtn.addEventListener('click', () => {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        recordBtn.disabled = false;
+        stopBtn.disabled = true;
+      }
+    });
+
     document.getElementById('setupForm')?.addEventListener('submit', function(e){
       e.preventDefault();
       const name = document.getElementById('name').value;
       const relationship = document.getElementById('relationship').value;
+      const selectedWish = document.getElementById('wishSelect').value;
+      const customWish = document.getElementById('customWish').value.trim();
+      const wish = customWish || selectedWish;
       const file = document.getElementById('image').files[0];
-      if (!file) return;
+      if (!file || !wish) return;
       const reader = new FileReader();
       reader.onload = function(evt){
         localStorage.setItem('name', name);
         localStorage.setItem('relationship', relationship);
+        localStorage.setItem('wish', wish);
         localStorage.setItem('image', evt.target.result);
+
+        const payload = {
+          name,
+          relationship,
+          wish,
+          image: evt.target.result,
+          voice: localStorage.getItem('voice') || ''
+        };
+        const encoded = encodeURIComponent(btoa(JSON.stringify(payload)));
+        const base = `${location.protocol}//${location.host}${location.pathname.replace('index.html','')}`;
+        const shareUrl = `${base}birthday.html?data=${encoded}`;
+
+        const shareLinkInput = document.getElementById('shareLink');
+        shareLinkInput.value = shareUrl;
+        document.getElementById('shareContainer').style.display = 'block';
+
+        if (navigator.share) {
+          navigator.share({ title: 'Birthday Gift', url: shareUrl }).catch(err => console.warn('Share failed', err));
+        }
+
         document.getElementById('setupForm').style.display = 'none';
         document.getElementById('gift').style.display = 'block';
       };
@@ -135,6 +214,13 @@
         document.getElementById('setupForm').style.display = 'none';
         document.getElementById('gift').style.display = 'block';
       }
+    });
+
+    document.getElementById('copyLinkBtn').addEventListener('click', () => {
+      const shareLinkInput = document.getElementById('shareLink');
+      shareLinkInput.select();
+      shareLinkInput.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(shareLinkInput.value);
     });
 
     function goToBirthdayPage() {

@@ -133,12 +133,26 @@
     <div class="person-image"><img id="userImage" alt="Person Image"></div>
   </header>
 
+  <audio id="voiceMessage" controls style="display:none; margin:20px auto;"></audio>
   <audio id="bgMusic" loop src="./hpbd_to_ba.mp3"></audio>
 
   <script>
-    const name = localStorage.getItem('name');
-    const relationship = (localStorage.getItem('relationship') || '').toLowerCase();
-    const imageSrc = localStorage.getItem('image');
+    const params = new URLSearchParams(window.location.search);
+    const dataParam = params.get('data');
+    let sharedData = null;
+    if (dataParam) {
+      try {
+        sharedData = JSON.parse(atob(decodeURIComponent(dataParam)));
+      } catch (e) {
+        console.error('Failed to parse shared data', e);
+      }
+    }
+
+    const name = sharedData?.name || localStorage.getItem('name');
+    const relationship = (sharedData?.relationship || localStorage.getItem('relationship') || '').toLowerCase();
+    const imageSrc = sharedData?.image || localStorage.getItem('image');
+    const wish = sharedData?.wish || localStorage.getItem('wish');
+    const voiceSrc = sharedData?.voice || localStorage.getItem('voice');
 
     if(!name || !relationship || !imageSrc){
       window.location.href = 'index.html';
@@ -154,7 +168,7 @@
       sister: `Happy Birthday to my amazing sister ${name}!`,
       brother: `Happy Birthday to my awesome brother ${name}!`
     };
-    const msg = relationshipMessages[relationship] || `Happy Birthday ${name}! Wishing you a fantastic day!`;
+    const msg = wish || relationshipMessages[relationship] || `Happy Birthday ${name}! Wishing you a fantastic day!`;
     let i = 0;
     const personImage = document.querySelector('.person-image');
 
@@ -179,10 +193,18 @@
     setInterval(createHeart, 500);
 
     const bgMusic = document.getElementById("bgMusic");
+    const voiceMessage = document.getElementById("voiceMessage");
     window.addEventListener('DOMContentLoaded', () => {
       bgMusic.play().catch((e) => {
         console.warn("Autoplay failed, waiting for user interaction.", e);
       });
+      if (voiceSrc) {
+        voiceMessage.src = voiceSrc;
+        voiceMessage.style.display = 'block';
+        voiceMessage.play().catch((e) => {
+          console.warn("Voice autoplay failed, waiting for user interaction.", e);
+        });
+      }
     });
   </script>
 </body>
